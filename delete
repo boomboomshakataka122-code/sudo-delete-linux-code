@@ -1,0 +1,57 @@
+#!/bin/bash
+if [ "$1" = "linux" ]; then
+    echo "Attempting to delete Linux..."
+    sleep 5
+    echo "Deleting / with status=progress"
+    sleep 0.1
+    echo "Deleting /bin and its contents...done"
+    sleep 0.1
+    echo "Deleting /boot and its contents...done"
+    sleep 0.1
+    echo "Deleting /cdrom and its contents...done"
+    sleep 0.1
+    echo "Deleting /dev and its contents...done"
+    sleep 0.1
+    echo "Deleting /etc and its contents...done" 
+    sleep 0.1
+    echo "Deleting /~ (/home) and its contents...done"
+    sleep 0.1
+    echo "Deleting all 32 and 64 bit libraries (/lib, /lib64, and /var/lib)...done"
+    sleep 0.1
+    echo "Deleting /media and its contents...done"
+    sleep 0.1
+    echo "Deleting /mnt and its contents...done"
+    sleep 0.1
+    echo "Deleting /opt and its contents...done"
+    sleep 0.1
+    echo "Deleting /proc and its contents...done"
+    sleep 0.1
+    echo "Deleting /root and its contents...done"
+    sleep 0.1
+    echo "Deleting /run and its contents...done"
+    sleep 0.1
+    echo "Deleting /sbin and its contents...done"
+    sleep 0.1
+    echo "Deleting /snap if detected...detected..done"
+    sleep 0.1
+    echo "Deleting /srv and its contents...done"
+    sleep 0.1
+    echo "Deleting /sys and its contents...done"
+    sleep 0.1
+    echo "Deleting temporary files and /tmp...done"
+    sleep 0.1
+    echo "Deleting /usr and its contents...done"
+    sleep 0.1
+    echo "Deleting /var and its contents...done"
+    sleep 0.1
+    echo "Deleting swap.img (this might take a while)..."
+    sleep 5
+    echo "...done"
+    sleep 2
+    echo "Deleting the bootloader this system currently uses (this might take a while)..."
+    sleep 10
+    echo "Done! Reboot your system to see that Linux is gone!" 
+
+else
+    echo "delete: unknown target"
+fi
