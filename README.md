@@ -11,7 +11,7 @@ You could use it for nothing. Really. It wont destroy your system, it wont do an
 ## How to install it and use it
 The commands are :
 git clone https://github.com/boomboomshakataka122-code/sudo-delete-linux-code.git
-cd sudo-delete-linux
+cd sudo-delete-linux-code
 sudo chmod +x delete
 sudo mv delete /usr/local/bin (optional, if you want to remove ./ from ./delete)
 sudo delete linux
