@@ -1,56 +1,90 @@
 #!/bin/bash
+
+GREEN="\e[32m"
+RED="\e[31m"
+YELLOW="\e[33m"
+RESET="\e[0m"
+
 if [ "$1" = "linux" ]; then
-    echo "Attempting to delete Linux..."
-    sleep 5
-    echo "Deleting / with status=progress"
-    sleep 0.1
-    echo "Deleting /bin and its contents...done"
-    sleep 0.1
-    echo "Deleting /boot and its contents...done"
-    sleep 0.1
-    echo "Deleting /cdrom and its contents...done"
-    sleep 0.1
-    echo "Deleting /dev and its contents...done"
-    sleep 0.1
-    echo "Deleting /etc and its contents...done" 
-    sleep 0.1
-    echo "Deleting /~ (/home) and its contents...done"
-    sleep 0.1
-    echo "Deleting all 32 and 64 bit libraries (/lib, /lib64, and /var/lib)...done"
-    sleep 0.1
-    echo "Deleting /media and its contents...done"
-    sleep 0.1
-    echo "Deleting /mnt and its contents...done"
-    sleep 0.1
-    echo "Deleting /opt and its contents...done"
-    sleep 0.1
-    echo "Deleting /proc and its contents...done"
-    sleep 0.1
-    echo "Deleting /root and its contents...done"
-    sleep 0.1
-    echo "Deleting /run and its contents...done"
-    sleep 0.1
-    echo "Deleting /sbin and its contents...done"
-    sleep 0.1
-    echo "Deleting /snap if detected...detected..done"
-    sleep 0.1
-    echo "Deleting /srv and its contents...done"
-    sleep 0.1
-    echo "Deleting /sys and its contents...done"
-    sleep 0.1
-    echo "Deleting temporary files and /tmp...done"
-    sleep 0.1
-    echo "Deleting /usr and its contents...done"
-    sleep 0.1
-    echo "Deleting /var and its contents...done"
-    sleep 0.1
-    echo "Deleting swap.img (this might take a while)..."
-    sleep 5
-    echo "...done"
+    echo -e "${YELLOW}😱 Attempting to delete Linux...${RESET}\n"
     sleep 2
-    echo "Deleting the bootloader this system currently uses (this might take a while)..."
-    sleep 10
-    echo "Done! Reboot your system to see that Linux is gone!" 
+
+    # Function to simulate deletion with optional progress bar
+    delete_step() {
+        local desc="$1"
+        local sleep_time=${2:-0.2}
+        echo -n "$desc "
+        sleep $sleep_time
+        echo -e "${GREEN}...done${RESET}"
+    }
+
+    # Minor random delay to make it feel realistic
+    random_sleep() {
+        sleep_time=$(awk -v min=0.1 -v max=0.5 'BEGIN{srand(); print min+rand()*(max-min)}')
+        sleep $sleep_time
+    }
+
+    delete_step "Deleting / with status=progress" 0.5
+    delete_step "Deleting /bin and its contents"
+    random_sleep
+    delete_step "Deleting /boot and its contents"
+    random_sleep
+    delete_step "Deleting /cdrom and its contents"
+    random_sleep
+    delete_step "Deleting /dev and its contents"
+    random_sleep
+    delete_step "Deleting /etc and its contents"
+    random_sleep
+    delete_step "Deleting /~ (/home) and its contents"
+    random_sleep
+    delete_step "Deleting all 32 and 64 bit libraries (/lib, /lib64, /var/lib)"
+    random_sleep
+    delete_step "Deleting /media and its contents"
+    random_sleep
+    delete_step "Deleting /mnt and its contents"
+    random_sleep
+    delete_step "Deleting /opt and its contents"
+    random_sleep
+    delete_step "Deleting /proc and its contents"
+    random_sleep
+    delete_step "Deleting /root and its contents"
+    random_sleep
+    delete_step "Deleting /run and its contents"
+    random_sleep
+    delete_step "Deleting /sbin and its contents"
+    random_sleep
+    delete_step "Deleting /snap if detected"
+    random_sleep
+    delete_step "Deleting /srv and its contents"
+    random_sleep
+    delete_step "Deleting /sys and its contents"
+    random_sleep
+    delete_step "Deleting temporary files and /tmp"
+    random_sleep
+    delete_step "Deleting /usr and its contents"
+    random_sleep
+    delete_step "Deleting /var and its contents"
+
+    # Fake long steps with progress bar
+    echo -e "${YELLOW}Deleting swap.img (this might take a while)...${RESET}"
+    echo -n "["
+    for i in {1..20}; do
+        echo -n "#"
+        sleep 0.2
+    done
+    echo -e "] ${GREEN}...done${RESET}"
+    sleep 1
+
+    echo -e "${YELLOW}Deleting the bootloader this system currently uses (this might take a while)...${RESET}"
+    echo -n "["
+    for i in {1..30}; do
+        echo -n "#"
+        sleep 0.3
+    done
+    echo -e "] ${GREEN}...done${RESET}"
+    sleep 1
+
+    echo -e "\n${RED}✅ Done! Reboot your system to see that Linux is gone!${RESET}"
 
 else
     echo "delete: unknown target"
