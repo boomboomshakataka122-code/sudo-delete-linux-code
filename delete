@@ -1,90 +1,155 @@
 #!/bin/bash
 
-GREEN="\e[32m"
-RED="\e[31m"
-YELLOW="\e[33m"
-RESET="\e[0m"
-
 if [ "$1" = "linux" ]; then
-    echo -e "${YELLOW}😱 Attempting to delete Linux...${RESET}\n"
-    sleep 2
 
-    # Function to simulate deletion with optional progress bar
-    delete_step() {
-        local desc="$1"
-        local sleep_time=${2:-0.2}
-        echo -n "$desc "
-        sleep $sleep_time
-        echo -e "${GREEN}...done${RESET}"
-    }
+echo "delete utility (https://github.com/boomboomshakataka122-code/sudo-delete-linux-code)"
+echo
 
-    # Minor random delay to make it feel realistic
-    random_sleep() {
-        sleep_time=$(awk -v min=0.1 -v max=0.5 'BEGIN{srand(); print min+rand()*(max-min)}')
-        sleep $sleep_time
-    }
+progress=0
 
-    delete_step "Deleting / with status=progress" 0.5
-    delete_step "Deleting /bin and its contents"
-    random_sleep
-    delete_step "Deleting /boot and its contents"
-    random_sleep
-    delete_step "Deleting /cdrom and its contents"
-    random_sleep
-    delete_step "Deleting /dev and its contents"
-    random_sleep
-    delete_step "Deleting /etc and its contents"
-    random_sleep
-    delete_step "Deleting /~ (/home) and its contents"
-    random_sleep
-    delete_step "Deleting all 32 and 64 bit libraries (/lib, /lib64, /var/lib)"
-    random_sleep
-    delete_step "Deleting /media and its contents"
-    random_sleep
-    delete_step "Deleting /mnt and its contents"
-    random_sleep
-    delete_step "Deleting /opt and its contents"
-    random_sleep
-    delete_step "Deleting /proc and its contents"
-    random_sleep
-    delete_step "Deleting /root and its contents"
-    random_sleep
-    delete_step "Deleting /run and its contents"
-    random_sleep
-    delete_step "Deleting /sbin and its contents"
-    random_sleep
-    delete_step "Deleting /snap if detected"
-    random_sleep
-    delete_step "Deleting /srv and its contents"
-    random_sleep
-    delete_step "Deleting /sys and its contents"
-    random_sleep
-    delete_step "Deleting temporary files and /tmp"
-    random_sleep
-    delete_step "Deleting /usr and its contents"
-    random_sleep
-    delete_step "Deleting /var and its contents"
+delete_file() {
+    echo -n "Deleting $1"
+    sleep 0.05
+    echo "...done"
+}
 
-    # Fake long steps with progress bar
-    echo -e "${YELLOW}Deleting swap.img (this might take a while)...${RESET}"
-    echo -n "["
-    for i in {1..20}; do
-        echo -n "#"
-        sleep 0.2
-    done
-    echo -e "] ${GREEN}...done${RESET}"
-    sleep 1
+update_progress() {
+    progress=$((progress + 1))
+    printf "Progress: %d%%\n" "$progress"
+}
 
-    echo -e "${YELLOW}Deleting the bootloader this system currently uses (this might take a while)...${RESET}"
-    echo -n "["
-    for i in {1..30}; do
-        echo -n "#"
-        sleep 0.3
-    done
-    echo -e "] ${GREEN}...done${RESET}"
-    sleep 1
+echo "Initializing Linux removal sequence..."
+sleep 2
+echo "Scanning mounted filesystems..."
+sleep 1
+echo "Root filesystem detected."
+sleep 1
+echo "Preparing deletion routines..."
+sleep 2
+echo
 
-    echo -e "\n${RED}✅ Done! Reboot your system to see that Linux is gone!${RESET}"
+echo "Phase 1: Removing core binaries"
+
+for file in bash sh ls cp mv rm mkdir cat chmod chown uname mount umount ps grep echo kill; do
+    delete_file "/bin/$file"
+    update_progress
+done
+
+echo
+echo "Phase 2: Removing system configuration"
+
+for file in passwd shadow group hostname hosts fstab sudoers issue resolv.conf; do
+    delete_file "/etc/$file"
+    update_progress
+done
+
+echo
+echo "Phase 3: Removing boot components"
+
+for file in vmlinuz initrd.img System.map config; do
+    delete_file "/boot/$file"
+    update_progress
+done
+
+delete_file "/boot/grub/grub.cfg"
+update_progress
+
+delete_file "/boot/grub/grubenv"
+update_progress
+
+echo
+echo "Phase 4: Removing shared libraries"
+
+for file in libc.so.6 libm.so.6 libpthread.so.0 libdl.so.2 libutil.so.1 libcrypt.so.1; do
+    delete_file "/lib/$file"
+    update_progress
+done
+
+echo
+echo "Phase 5: Removing kernel modules"
+
+modules=(ext4 xfs btrfs overlay loop dm_mod fuse vfat nls_utf8)
+for module in "${modules[@]}"; do
+    delete_file "/lib/modules/kernel/$module.ko"
+    update_progress
+done
+
+echo
+echo "Phase 6: Removing system logs"
+
+for file in syslog kern.log auth.log dpkg.log boot.log; do
+    delete_file "/var/log/$file"
+    update_progress
+done
+
+echo
+echo "Phase 7: Removing user environment"
+
+delete_file "/home/user/.bashrc"
+update_progress
+
+delete_file "/home/user/.profile"
+update_progress
+
+delete_file "/home/user/Documents"
+update_progress
+
+delete_file "/home/user/Downloads"
+update_progress
+
+delete_file "/home/user/Desktop"
+update_progress
+
+echo
+echo "Phase 8: Removing package manager data"
+
+delete_file "/var/lib/dpkg/status"
+update_progress
+
+delete_file "/var/lib/dpkg/available"
+update_progress
+
+delete_file "/var/lib/apt/lists"
+update_progress
+
+echo
+echo "Phase 9: Destroying bootloader"
+
+delete_file "/boot/efi/EFI/ubuntu/grubx64.efi"
+update_progress
+
+delete_file "/boot/efi/EFI/ubuntu/shimx64.efi"
+update_progress
+
+echo
+echo "Phase 10: Removing swap"
+
+echo -n "Deleting /swapfile"
+sleep 3
+echo "...done"
+
+echo
+echo "Phase 11: Wiping disk sectors"
+
+for i in {1..10}; do
+    echo "Overwriting disk sector group $i/10..."
+    sleep 0.4
+done
+
+echo "...done"
+
+echo
+echo "Performing final verification..."
+sleep 3
+
+echo "Scanning filesystem remnants..."
+sleep 2
+
+echo "No Linux installation detected."
+
+echo
+echo "Linux removal completed successfully."
+echo "Reboot the system to finalize the removal."
 
 else
     echo "delete: unknown target"
